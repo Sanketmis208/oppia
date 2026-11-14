@@ -667,6 +667,23 @@ describe('Settings Tab Component', () => {
     expect(windowRef.nativeWindow.location).toBe('');
   }));
 
+  it('should offer the playtester role only for a private exploration', () => {
+    const isPrivateSpy = spyOn(explorationRightsService, 'isPrivate');
+
+    isPrivateSpy.and.returnValue(true);
+    expect(component.getAssignableRoles().map(role => role.value)).toEqual([
+      'owner',
+      'editor',
+      'viewer',
+    ]);
+
+    isPrivateSpy.and.returnValue(false);
+    expect(component.getAssignableRoles().map(role => role.value)).toEqual([
+      'owner',
+      'editor',
+    ]);
+  });
+
   it('should open a modal when removeRole is called', fakeAsync(() => {
     spyOn(ngbModal, 'open').and.callFake(
       (_dlg: Type<unknown>, _opt: NgbModalOptions) => {

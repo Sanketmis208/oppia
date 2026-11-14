@@ -499,6 +499,18 @@ export class SettingsTabComponent implements OnInit, OnDestroy {
   }
 
   // Methods for rights management.
+  /**
+   * Returns the roles that can be given to a new member. Anyone can play a
+   * public exploration, so the playtester (viewer) role is only offered while
+   * the exploration is private.
+   */
+  getAssignableRoles(): {name: string; value: string}[] {
+    if (this.explorationRightsService.isPrivate()) {
+      return this.ROLES;
+    }
+    return this.ROLES.filter(role => role.value !== 'viewer');
+  }
+
   openEditRolesForm(): void {
     this.isRolesFormOpen = true;
     this.newMemberUsername = '';
